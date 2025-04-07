@@ -256,7 +256,7 @@ export default function Map() {
             coordinate={point.location}
             title={`Point ${index + 1}`}
             description="Characteristic Point"
-            onPress={() => setSelectedImage(point.imageUri)} // Set the selected image URI
+            onPress={() => setSelectedImage(point.imageUri)} // Ensure image URI is set
           />
         ))}
       </MapView>
@@ -298,7 +298,11 @@ export default function Map() {
           onRequestClose={closeImageModal}
         >
           <View style={styles.modalContainer}>
-            <Image source={{ uri: selectedImage }} style={styles.modalImage} />
+            <Image
+              source={{ uri: selectedImage }}
+              style={{ width: 300, height: 300 }}
+            />{" "}
+            {/* Ensure image is displayed */}
             <TouchableOpacity
               onPress={closeImageModal}
               style={styles.closeButton}
