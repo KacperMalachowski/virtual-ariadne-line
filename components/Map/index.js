@@ -83,15 +83,17 @@ export default function Map() {
               longitude: location.coords.longitude,
             };
             setCurrentLocation(newLocation);
-            setRoute((prevRoute) => [...prevRoute, newLocation]);
-
-            if (mapRef.current) {
-              mapRef.current.animateToRegion({
-                ...newLocation,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              });
-            }
+            setRoute((prevRoute) => {
+              const updatedRoute = [...prevRoute, newLocation];
+              if (mapRef.current) {
+                mapRef.current.animateToRegion({
+                  ...newLocation,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                });
+              }
+              return updatedRoute;
+            });
           },
           (error) => {
             Alert.alert("Location Error", error.message);
