@@ -1,13 +1,18 @@
 import React from "react";
-import { View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import Map from "./components/Map";
+import SavedRoutes from "./components/SavedRoutes";
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <Map />
-      </View>
-    );
-  }
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Map">
+        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="SavedRoutes" component={SavedRoutes} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }

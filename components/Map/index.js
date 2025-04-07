@@ -6,20 +6,26 @@ import {
   Alert,
   Image,
   Modal,
+  TextInput,
   StyleSheet,
 } from "react-native";
 import MapView, { Polyline, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import { useNavigation } from "@react-navigation/native"; // Import navigation hook
 import styles from "./Map.styles";
 
 export default function Map() {
+  const navigation = useNavigation(); // Initialize navigation
   const [gpsEnabled, setGpsEnabled] = useState(false);
   const [route, setRoute] = useState([]);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [locationSubscription, setLocationSubscription] = useState(null);
   const [characteristicPoints, setCharacteristicPoints] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [routeName, setRouteName] = useState(""); // New state for route name
+  const [isNamingRoute, setIsNamingRoute] = useState(false); // New state for naming modal
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -148,6 +154,38 @@ export default function Map() {
     }
   };
 
+  const saveRoute = async () => {
+    if (route.length === 0) {
+      Alert.alert("No Route", "There is no route to save.");
+      return;
+    }
+
+    if (!routeName.trim()) {
+      Alert.alert("Invalid Name", "Please provide a name for the route.");
+      return;
+    }
+
+    const data = {
+      name: routeName, // Include the route name
+      route,
+      characteristicPoints,
+    };
+
+    try {
+      const fileUri = `${FileSystem.documentDirectory}route_${Date.now()}.json`;
+      await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
+      Alert.alert("Success", `Route "${routeName}" saved to ${fileUri}`);
+      setRouteName(""); // Reset the route name
+      setIsNamingRoute(false); // Close the naming modal
+    } catch (error) {
+      Alert.alert("Error", `Failed to save route: ${error.message}`);
+    }
+  };
+
+  const promptRouteName = () => {
+    setIsNamingRoute(true); // Open the naming modal
+  };
+
   useEffect(() => {
     return () => {
       // Cleanup on unmount
@@ -198,6 +236,18 @@ export default function Map() {
             <Text style={styles.buttonText}>Save Point</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          onPress={promptRouteName} // Open naming modal
+          style={[styles.button, { backgroundColor: "orange", marginTop: 10 }]}
+        >
+          <Text style={styles.buttonText}>Save Route</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SavedRoutes")} // Navigate to SavedRoutes view
+          style={[styles.button, { backgroundColor: "purple", marginTop: 10 }]}
+        >
+          <Text style={styles.buttonText}>View Saved Routes</Text>
+        </TouchableOpacity>
       </View>
       {selectedImage && (
         <Modal
@@ -213,6 +263,38 @@ export default function Map() {
               style={styles.closeButton}
             >
               <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
+      {isNamingRoute && (
+        <Modal
+          transparent={true}
+          animationType="slide"
+          visible={isNamingRoute}
+          onRequestClose={() => setIsNamingRoute(false)}
+        >
+          <View style={styles.modalContainer}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter route name"
+              value={routeName}
+              onChangeText={setRouteName}
+            />
+            <TouchableOpacity
+              onPress={saveRoute}
+              style={[
+                styles.button,
+                { backgroundColor: "green", marginTop: 10 },
+              ]}
+            >
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setIsNamingRoute(false)}
+              style={[styles.closeButton, { marginTop: 10 }]}
+            >
+              <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </Modal>

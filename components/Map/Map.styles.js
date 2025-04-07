@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonText: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
   },
   modalContainer: {
@@ -44,6 +44,16 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "black",
     fontWeight: "bold",
+  },
+  textInput: {
+    width: "80%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    backgroundColor: "white",
+    marginBottom: 10,
   },
 });
 
