@@ -24,6 +24,27 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
+  modalImage: {
+    width: "80%",
+    height: "60%",
+    resizeMode: "contain",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "black",
+    fontWeight: "bold",
+  },
 });
 
 export default styles;
