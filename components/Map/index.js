@@ -9,7 +9,7 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import MapView, { Polyline, Marker } from "react-native-maps";
+import MapView, { Polyline, Marker, UrlTile } from "react-native-maps"; // Removed PROVIDER_GOOGLE
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
@@ -241,10 +241,10 @@ export default function Map() {
         {currentLocation && (
           <Marker coordinate={currentLocation} title="Current Location" />
         )}
-        {routeData.length > 0 && ( // Ensure routeData is not empty
+        {routeData.length > 0 && (
           <Polyline
             coordinates={routeData.filter(
-              (point) => point && point.latitude && point.longitude // Validate points
+              (point) => point && point.latitude && point.longitude
             )}
             strokeWidth={5}
             strokeColor="blue"
@@ -256,7 +256,7 @@ export default function Map() {
             coordinate={point.location}
             title={`Point ${index + 1}`}
             description="Characteristic Point"
-            onPress={() => setSelectedImage(point.imageUri)} // Ensure image URI is set
+            onPress={() => setSelectedImage(point.imageUri)}
           />
         ))}
       </MapView>
@@ -301,8 +301,7 @@ export default function Map() {
             <Image
               source={{ uri: selectedImage }}
               style={{ width: 300, height: 300 }}
-            />{" "}
-            {/* Ensure image is displayed */}
+            />
             <TouchableOpacity
               onPress={closeImageModal}
               style={styles.closeButton}
