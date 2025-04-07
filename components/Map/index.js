@@ -13,13 +13,14 @@ import MapView, { Polyline, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import { useNavigation } from "@react-navigation/native"; // Import navigation hook
+import { useNavigation, useRoute } from "@react-navigation/native"; // Import navigation and route hooks
 import styles from "./Map.styles";
 
 export default function Map() {
   const navigation = useNavigation(); // Initialize navigation
+  const route = useRoute(); // Get route data from navigation
   const [gpsEnabled, setGpsEnabled] = useState(false);
-  const [route, setRoute] = useState([]);
+  const [routeData, setRoute] = useState([]); // Ensure setRoute is defined
   const [currentLocation, setCurrentLocation] = useState(null);
   const [locationSubscription, setLocationSubscription] = useState(null);
   const [characteristicPoints, setCharacteristicPoints] = useState([]);
@@ -27,6 +28,22 @@ export default function Map() {
   const [routeName, setRouteName] = useState(""); // New state for route name
   const [isNamingRoute, setIsNamingRoute] = useState(false); // New state for naming modal
   const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (route.params?.routeData) {
+      const { route: savedRoute, characteristicPoints: savedPoints } =
+        route.params.routeData;
+      setRoute(savedRoute); // Use setRoute to update the route
+      setCharacteristicPoints(savedPoints || []);
+      if (mapRef.current && savedRoute.length > 0) {
+        mapRef.current.animateToRegion({
+          ...savedRoute[0],
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      }
+    }
+  }, [route.params]);
 
   useEffect(() => {
     const fetchInitialLocation = async () => {
@@ -68,18 +85,37 @@ export default function Map() {
   }, []);
 
   const toggleGps = async () => {
-    console.log("Toggle GPS, current state:", gpsEnabled, " route:", route);
     if (gpsEnabled) {
-      // Stop tracking and clear characteristic points
+      // Stop tracking
       if (locationSubscription) {
         locationSubscription.remove();
         setLocationSubscription(null);
       }
       setGpsEnabled(false);
-      setCharacteristicPoints([]); // Clear points when GPS is stopped
+
+      if (routeData.length > 0) {
+        // Ask the user if they want to save the route
+        Alert.alert(
+          "Save Route",
+          "Do you want to save this route for future use?",
+          [
+            {
+              text: "No",
+              style: "cancel",
+            },
+            {
+              text: "Yes",
+              onPress: () => setIsNamingRoute(true), // Open naming modal
+            },
+          ]
+        );
+      }
     } else {
+      // Start tracking
+      setRoute([]);
+      setCharacteristicPoints([]);
+
       try {
-        // Request permissions and start tracking
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
           Alert.alert(
@@ -205,7 +241,15 @@ export default function Map() {
         {currentLocation && (
           <Marker coordinate={currentLocation} title="Current Location" />
         )}
-        <Polyline coordinates={route} strokeWidth={5} strokeColor="blue" />
+        {routeData.length > 0 && ( // Ensure routeData is not empty
+          <Polyline
+            coordinates={routeData.filter(
+              (point) => point && point.latitude && point.longitude // Validate points
+            )}
+            strokeWidth={5}
+            strokeColor="blue"
+          />
+        )}
         {characteristicPoints.map((point, index) => (
           <Marker
             key={index}
@@ -217,6 +261,17 @@ export default function Map() {
         ))}
       </MapView>
       <View style={styles.buttonContainer}>
+        {gpsEnabled && (
+          <TouchableOpacity
+            onPress={saveCharacteristicPoint}
+            style={[
+              styles.button,
+              { backgroundColor: "blue", marginBottom: 10 },
+            ]} // Adjusted margin for spacing
+          >
+            <Text style={styles.buttonText}>Save Point</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={toggleGps}
           style={[
@@ -227,20 +282,6 @@ export default function Map() {
           <Text style={styles.buttonText}>
             {gpsEnabled ? "Stop GPS" : "Start GPS"}
           </Text>
-        </TouchableOpacity>
-        {gpsEnabled && (
-          <TouchableOpacity
-            onPress={saveCharacteristicPoint}
-            style={[styles.button, { backgroundColor: "blue", marginTop: 10 }]}
-          >
-            <Text style={styles.buttonText}>Save Point</Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          onPress={promptRouteName} // Open naming modal
-          style={[styles.button, { backgroundColor: "orange", marginTop: 10 }]}
-        >
-          <Text style={styles.buttonText}>Save Route</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate("SavedRoutes")} // Navigate to SavedRoutes view
