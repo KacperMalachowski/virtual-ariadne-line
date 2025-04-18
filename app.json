@@ -4,28 +4,26 @@
     "slug": "virtual-ariadne-line",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/icon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.virtualariadneline",
+      "bundleIdentifier": "pl.kacpermalachowski.virtualariadneline",
       "infoPlist": {
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app requires location access to track your route even when the app is in the background.",
         "NSLocationWhenInUseUsageDescription": "This app requires location access to track your route.",
-        "UIBackgroundModes": [
-          "location"
-        ]
+        "UIBackgroundModes": ["location"]
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.virtualariadneline",
@@ -36,12 +34,13 @@
       ]
     },
     "web": {
-      "favicon": "./assets/icons/favicon.png"
+      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
         "projectId": "87a0a2ad-12dc-4866-b77d-1e6a7aceefec"
       }
-    }
+    },
+    "plugins": ["./plugins/android-manifest.plugin.js"]
   }
 }

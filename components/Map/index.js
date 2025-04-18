@@ -7,9 +7,9 @@ import {
   Image,
   Modal,
   TextInput,
-  StyleSheet,
+  Platform, // Import Platform module
 } from "react-native";
-import MapView, { Polyline, Marker, UrlTile } from "react-native-maps"; // Removed PROVIDER_GOOGLE
+import MapView, { Polyline, Marker, UrlTile } from "react-native-maps"; // Ensure UrlTile is imported
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";

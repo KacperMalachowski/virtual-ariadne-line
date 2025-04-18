@@ -320,7 +320,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.virtualariadneline";
+				PRODUCT_BUNDLE_IDENTIFIER = "pl.kacpermalachowski.virtualariadneline";
 				PRODUCT_NAME = "virtualariadneline";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -347,7 +347,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.anonymous.virtualariadneline";
+				PRODUCT_BUNDLE_IDENTIFIER = "pl.kacpermalachowski.virtualariadneline";
 				PRODUCT_NAME = "virtualariadneline";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
