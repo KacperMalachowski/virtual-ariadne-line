@@ -1,17 +1,22 @@
-const { withAndroidManifest } = require("@expo/config-plugins");
+const { withAndroidManifest, AndroidConfig } = require("@expo/config-plugins");
 
-module.exports = function androidManifestPlugin(config) {
+const { addMetaDataItemToMainApplication, getMainApplicationOrThrow } =
+  AndroidConfig.Manifest;
+
+module.exports = (config) => {
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   return withAndroidManifest(config, async (config) => {
-    let androidManifest = config.modResults.manifest;
+    if (!apiKey) {
+      throw new Error("GOOGLE_MAPS_API_KEY environment variable is not set.");
+    }
 
-    androidManifest.application[0]["meta-data"] =
-      androidManifest.application[0]["meta-data"].map((res) => {
-        if (res.$["android:name"] == "com.google.android.geo.API_KEY") {
-          res.$["android:value"] = process.env.GOOGLE_MAPS_API_KEY;
-        }
+    const mainApplication = getMainApplicationOrThrow(config.modResults);
 
-        return res;
-      });
+    addMetaDataItemToMainApplication(
+      mainApplication,
+      "com.google.android.geo.API_KEY",
+      apiKey
+    );
 
     return config;
   });

@@ -7,33 +7,36 @@ import {
   Image,
   Modal,
   TextInput,
-  Platform, // Import Platform module
 } from "react-native";
-import MapView, { Polyline, Marker, UrlTile } from "react-native-maps"; // Ensure UrlTile is imported
+import MapView, { Polyline, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import { useNavigation, useRoute } from "@react-navigation/native"; // Import navigation and route hooks
+import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./Map.styles";
+import {
+  startBackgroundLocation,
+  stopBackgroundLocation,
+} from "../../utils/backgroundLocation";
 
 export default function Map() {
-  const navigation = useNavigation(); // Initialize navigation
-  const route = useRoute(); // Get route data from navigation
+  const navigation = useNavigation();
+  const route = useRoute();
   const [gpsEnabled, setGpsEnabled] = useState(false);
-  const [routeData, setRoute] = useState([]); // Ensure setRoute is defined
+  const [routeData, setRoute] = useState([]);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [locationSubscription, setLocationSubscription] = useState(null);
   const [characteristicPoints, setCharacteristicPoints] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [routeName, setRouteName] = useState(""); // New state for route name
-  const [isNamingRoute, setIsNamingRoute] = useState(false); // New state for naming modal
+  const [routeName, setRouteName] = useState("");
+  const [isNamingRoute, setIsNamingRoute] = useState(false);
   const mapRef = useRef(null);
 
   useEffect(() => {
     if (route.params?.routeData) {
       const { route: savedRoute, characteristicPoints: savedPoints } =
         route.params.routeData;
-      setRoute(savedRoute); // Use setRoute to update the route
+      setRoute(savedRoute);
       setCharacteristicPoints(savedPoints || []);
       if (mapRef.current && savedRoute.length > 0) {
         mapRef.current.animateToRegion({
@@ -91,10 +94,10 @@ export default function Map() {
         locationSubscription.remove();
         setLocationSubscription(null);
       }
+      await stopBackgroundLocation();
       setGpsEnabled(false);
 
       if (routeData.length > 0) {
-        // Ask the user if they want to save the route
         Alert.alert(
           "Save Route",
           "Do you want to save this route for future use?",
@@ -105,13 +108,12 @@ export default function Map() {
             },
             {
               text: "Yes",
-              onPress: () => setIsNamingRoute(true), // Open naming modal
+              onPress: () => setIsNamingRoute(true),
             },
           ]
         );
       }
     } else {
-      // Start tracking
       setRoute([]);
       setCharacteristicPoints([]);
 
@@ -124,6 +126,8 @@ export default function Map() {
           );
           return;
         }
+
+        await startBackgroundLocation();
 
         const subscription = await Location.watchPositionAsync(
           {
@@ -202,7 +206,7 @@ export default function Map() {
     }
 
     const data = {
-      name: routeName, // Include the route name
+      name: routeName,
       route,
       characteristicPoints,
     };
@@ -211,15 +215,15 @@ export default function Map() {
       const fileUri = `${FileSystem.documentDirectory}route_${Date.now()}.json`;
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(data));
       Alert.alert("Success", `Route "${routeName}" saved to ${fileUri}`);
-      setRouteName(""); // Reset the route name
-      setIsNamingRoute(false); // Close the naming modal
+      setRouteName("");
+      setIsNamingRoute(false);
     } catch (error) {
       Alert.alert("Error", `Failed to save route: ${error.message}`);
     }
   };
 
   const promptRouteName = () => {
-    setIsNamingRoute(true); // Open the naming modal
+    setIsNamingRoute(true);
   };
 
   useEffect(() => {
@@ -267,7 +271,7 @@ export default function Map() {
             style={[
               styles.button,
               { backgroundColor: "blue", marginBottom: 10 },
-            ]} // Adjusted margin for spacing
+            ]}
           >
             <Text style={styles.buttonText}>Save Point</Text>
           </TouchableOpacity>
