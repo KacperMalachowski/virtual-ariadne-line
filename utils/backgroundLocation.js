@@ -11,7 +11,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
   if (data) {
     const { locations } = data;
     console.log("Background location: ", locations);
-    // Handle background location updates here
   }
 });
 
