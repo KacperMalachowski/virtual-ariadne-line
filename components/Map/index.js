@@ -207,7 +207,7 @@ export default function Map() {
 
     const data = {
       name: routeName,
-      route,
+      routeData,
       characteristicPoints,
     };
 
@@ -220,10 +220,6 @@ export default function Map() {
     } catch (error) {
       Alert.alert("Error", `Failed to save route: ${error.message}`);
     }
-  };
-
-  const promptRouteName = () => {
-    setIsNamingRoute(true);
   };
 
   useEffect(() => {
@@ -288,7 +284,7 @@ export default function Map() {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate("SavedRoutes")} // Navigate to SavedRoutes view
+          onPress={() => navigation.navigate("SavedRoutes")}
           style={[styles.button, { backgroundColor: "purple", marginTop: 10 }]}
         >
           <Text style={styles.buttonText}>View Saved Routes</Text>

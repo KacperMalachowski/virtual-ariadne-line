@@ -3,87 +3,87 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15, // Increased padding for better spacing
-    backgroundColor: "#f5f5f5", // Light background for better contrast
+    padding: 15,
+    backgroundColor: "#f5f5f5",
   },
   routeButton: {
-    borderRadius: 12, // Softer rounded corners
-    paddingVertical: 12, // Increased padding for better touch area
+    borderRadius: 12,
+    paddingVertical: 12,
     paddingHorizontal: 20,
-    backgroundColor: "#007bff", // Blue background for buttons
-    marginVertical: 8, // Increased spacing between buttons
-    shadowColor: "#000", // Add shadow for better visibility
+    backgroundColor: "#007bff",
+    marginVertical: 8,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 3, // Shadow for Android
+    elevation: 3,
   },
   routeButtonText: {
-    color: "white", // White text for better contrast
+    color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 16, // Slightly larger font for better readability
+    fontSize: 16,
   },
   emptyText: {
     textAlign: "center",
-    marginTop: 30, // Increased margin for better spacing
-    color: "#888", // Subtle gray color for empty text
-    fontSize: 16, // Slightly larger font for better readability
+    marginTop: 30,
+    color: "#888",
+    fontSize: 16,
   },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)", // Dim background for focus
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     padding: 20,
   },
   modalContent: {
-    width: "85%", // Adjusted width for better alignment
-    backgroundColor: "white", // Clean white background
-    borderRadius: 12, // Softer rounded corners
-    padding: 25, // Increased padding for better spacing
+    width: "85%",
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 25,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 6, // Enhanced shadow for Android
+    elevation: 6,
   },
   modalTitle: {
-    fontSize: 20, // Larger font for better emphasis
-    fontWeight: "700", // Bold for better visibility
-    marginBottom: 20, // Increased spacing below the title
-    color: "#333", // Neutral dark text color
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 20,
+    color: "#333",
     textAlign: "center",
   },
   textInput: {
     width: "100%",
     height: 45,
-    borderColor: "#ccc", // Subtle border color
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
-    backgroundColor: "#f9f9f9", // Light gray background for input
+    backgroundColor: "#f9f9f9",
     marginBottom: 20,
-    fontSize: 16, // Slightly larger font for better usability
+    fontSize: 16,
   },
   modalButton: {
     width: "100%",
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: "center",
-    marginBottom: 15, // Increased spacing between buttons
+    marginBottom: 15,
   },
   modalButtonText: {
     color: "white",
-    fontWeight: "600", // Semi-bold for better readability
-    fontSize: 16, // Larger font for button text
+    fontWeight: "600",
+    fontSize: 16,
   },
   modalButtonSave: {
-    backgroundColor: "#28a745", // Green for save button
+    backgroundColor: "#28a745",
   },
   modalButtonCancel: {
-    backgroundColor: "#dc3545", // Red for cancel button
+    backgroundColor: "#dc3545",
   },
 });
 
