@@ -23,4 +23,4 @@ jobs:
         run: yarn install
 
       - name: 🚀 Create update
-        run: eas update --auto --non-interactive
+        run: eas build --platform android --profile preview --non-interactive
