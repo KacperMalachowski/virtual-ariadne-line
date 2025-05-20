@@ -40,7 +40,7 @@ export default function Map() {
       setCharacteristicPoints(savedPoints || []);
 
       console.log("Route data from params:", routeData);
-      if (mapRef.current && routeData.length > 0) {
+      if (mapRef.current && routeData?.length > 0) {
         mapRef.current.animateToRegion({
           ...routeData[0],
           latitudeDelta: 0.01,
@@ -243,7 +243,7 @@ export default function Map() {
         {currentLocation && (
           <Marker coordinate={currentLocation} title="Current Location" />
         )}
-        {routeData.length > 0 && (
+        {routeData && routeData.length > 0 && (
           <Polyline
             coordinates={routeData.filter(
               (point) => point && point.latitude && point.longitude
