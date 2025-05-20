@@ -38,9 +38,11 @@ export default function Map() {
         route.params.routeData;
       setRoute(savedRoute);
       setCharacteristicPoints(savedPoints || []);
-      if (mapRef.current && savedRoute.length > 0) {
+
+      console.log("Route data from params:", routeData);
+      if (mapRef.current && routeData.length > 0) {
         mapRef.current.animateToRegion({
-          ...savedRoute[0],
+          ...routeData[0],
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         });
@@ -195,7 +197,7 @@ export default function Map() {
   };
 
   const saveRoute = async () => {
-    if (route.length === 0) {
+    if (routeData.length === 0) {
       Alert.alert("No Route", "There is no route to save.");
       return;
     }
@@ -207,7 +209,7 @@ export default function Map() {
 
     const data = {
       name: routeName,
-      routeData,
+      route: routeData,
       characteristicPoints,
     };
 
